@@ -9,7 +9,7 @@ public class MenuInitial{
         Console.Clear();
         Console.WriteLine("Bem-Vindo ao Jogo da Forca!!!\n");
         Console.WriteLine("Escolha uma das opções abaixo!!!");
-        Console.WriteLine("[1]Jogar\n[2]Sobre\n[3]Equipe\n[4]Sair");
+        Console.WriteLine("[1] Jogar\n[2] Sobre\n[3] Equipe\n[4] Sair");
         Console.Write("Escolha: ");
         menuChoose = int.Parse(Console.ReadLine());
 
