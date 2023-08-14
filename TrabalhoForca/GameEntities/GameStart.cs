@@ -19,55 +19,61 @@ public class GamesStart{
 
     var errorsCounter = 0;
     var win = false;
+    var exitWinCondition = false;
     var alreadyPlayedThatLetter = false;
     List<char> wrongLetters = new();
     List<char> lettersPlayed = new();
     PrintsGame prints = new PrintsGame();
 
-    while(win == false && errorsCounter != 7){
-      PuppetManipulation(errorsCounter);
+    while(exitWinCondition == false && errorsCounter != 7){ //Enquanto o user não vencer ou não perder, irá rodar o código.
+      PuppetManipulation(errorsCounter); //Manipulação da matriz mostrada ao jogador em relação ao número de erros.
 
-      alreadyPlayedThatLetter = prints.InitPrint(_puppetNow, wrongLetters, stringShowed, alreadyPlayedThatLetter);
+      //Prints do jogo.
+      alreadyPlayedThatLetter = prints.InitPrint(_puppetNow, wrongLetters, stringShowed, alreadyPlayedThatLetter); 
       
-      if(errorsCounter < 6){
+      if(errorsCounter < 6 && win != true){ //O Menu de aplicação só será mostrado caso não tenha vencido ou perdido
         Console.Write("Digite a letra: ");
-        string phrase = Console.ReadLine().ToLower().Replace(" ", "");
+        string phrase = Console.ReadLine().ToLower().Replace(" ", ""); //Manipulando a string inserida pelo user
         
-        var phraseInChar = phrase.ToCharArray();
+        var phraseInChar = phrase.ToCharArray(); //Transformando a string inserida pelo user em um vetor char
 
-        if(phraseInChar.Length == 1){
-          if(lettersPlayed.Contains(phraseInChar[0])){
+        if(phraseInChar.Length == 1){ //Caso o tamanho do vetor seja 1, ou seja, ele tenha inserido apenas uma letra
+          if(lettersPlayed.Contains(phraseInChar[0])){ //Condição para ver se a letra ja foi jogada ou não
             alreadyPlayedThatLetter = true;
           }
           else{
-            lettersPlayed.Add(phraseInChar[0]);
+            lettersPlayed.Add(phraseInChar[0]); //Adiciona a letra jogada na lista de letras ja jogadas.
 
-            var containsThisLetter = _word.ToLower().Contains(phraseInChar[0]);
+            var containsThisLetter = _word.ToLower().Contains(phraseInChar[0]); //Verificando se contem a letra digitada pelo user na palavra
 
-            if(containsThisLetter){
+            if(containsThisLetter){ //Caso contenha
               var counter = 0;
 
-              foreach(var letter in wordInVector){
-                if(letter == phraseInChar[0]){
-                  var stringShowedToVector = stringShowed.ToCharArray();
+              foreach(var letter in wordInVector){ //Verificando todas as letras da palavra definida
+                if(letter == phraseInChar[0]){ //Caso a letra da palavra definida seja igual a letra inserida pelo user
+                  var stringShowedToVector = stringShowed.ToCharArray(); //Atribuindo na variável a string mostrada em um vetor char
 
-                  stringShowedToVector[counter + counter] = letter;
+                  /*
+                    Nesta parte foi feito um cálculo para poder substitiuir as letras da string mostrada
+                    para a palavra inserida, devido aos espaços entre cada "_".
+                  */
+                  stringShowedToVector[counter + counter] = letter; 
 
-                  var stringToChange = new string(stringShowedToVector);
+                  var stringToChange = new string(stringShowedToVector); //Transformando a stringshowed vetorizada em uma string
 
-                  stringShowed = stringToChange;
+                  stringShowed = stringToChange; //Atribuindo o valor alterado para a string mostrada
                 }
 
                 counter++;
               }
 
-              if(stringShowed.Replace(" ", "") == _word.Replace(" ", "").ToLower()){
+              if(stringShowed.Replace(" ", "") == _word.Replace(" ", "").ToLower()){ //Verificação de vitórioa
                 win = true;
               }
             }
-            else{
-              wrongLetters.Add(phraseInChar[0]);
-              errorsCounter++;
+            else{ //Caso não contenha a letra inserida pelo user na palavra
+              wrongLetters.Add(phraseInChar[0]); //Adicionar a letra na lista de letrar erradas.
+              errorsCounter++; //Aumenta o contador da derrota.
             }
           }
         }
@@ -80,14 +86,19 @@ public class GamesStart{
           Thread.Sleep(3000);
         } 
       }
-      else{
+      else if(win == true){ //Pause para o user ver que ele venceu
+        Thread.Sleep(3000);
+
+        exitWinCondition = true;
+      }
+      else{ //Pause para o user ver que ele perdeu
         Thread.Sleep(3000);
 
         errorsCounter++;
       }
     }
 
-    if(win){
+    if(win){ //Caso ele tenha ganho aparecerá essas mensagens na tela
       Console.Clear();
 
       Console.WriteLine("PARABÉNS VOCÊ ACERTOU A PALAVRA!!!");
@@ -97,7 +108,7 @@ public class GamesStart{
 
       return true;
     }
-    else{
+    else{ //Caso ele tenha perdido aparecerá essas mensagens na tela
       Console.Clear();
 
       Console.WriteLine("Infelizmente você perdeu...\nNão desista!");
@@ -109,7 +120,7 @@ public class GamesStart{
     }
   }
 
-  public void PuppetManipulation(int errorsCounter){
+  public void PuppetManipulation(int errorsCounter){ //Manipulações da matriz mostrada em relação ao contador de erro
     PuppetGameMatrice puppetStages = new();
 
     switch(errorsCounter){
@@ -143,7 +154,7 @@ public class GamesStart{
       }
   }
   
-  public GamesStart(string word){
+  public GamesStart(string word){ //Construtor
     _word = word;
   }
 }
